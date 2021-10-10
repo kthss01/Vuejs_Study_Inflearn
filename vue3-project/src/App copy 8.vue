@@ -6,17 +6,16 @@
       type="text" 
       v-model="searchText"
       placeholder="Search"
-      @keyup.enter="searchTodo"
     >
     <hr />
     <TodoSimpleForm @add-todo="addTodo" />
     <div style="color: red">{{ error }}</div>
 
-    <div v-if="!todos.length">
+    <div v-if="!filteredTodos.length">
       There is nothing to display
     </div>    
     <TodoList 
-      :todos="todos" 
+      :todos="filteredTodos" 
       @toggle-todo="toggleTodo" 
       @delete-todo="deleteTodo"
     />
@@ -49,7 +48,10 @@
 </template>
  
 <script>
+// import { ref, computed } from 'vue';
 import { ref, computed, watch } from 'vue';
+// import { ref, computed, watch, reactive } from 'vue';
+// import { ref, computed, watchEffect, reactive } from 'vue';
 import TodoSimpleForm from './components/TodoSimpleForm.vue';
 import TodoList from './components/TodoList.vue';
 import axios from 'axios';
@@ -65,8 +67,31 @@ export default {
     const numberOfTodos = ref(0);
     const limit = 5;
     const currentPage = ref(1);
-    const searchText = ref('');
+    // const a = reactive({
+    //   b: 1,
+    //   c: 3,
+    // });
 
+    // watch(() => a.b, (current, prev) => {
+    //   console.log(current, prev);
+    // });
+
+    // watch(() => [a.b, a.c], (current, prev) => {
+    //   console.log(current, prev);
+    // });
+
+    // a.b = 2;
+
+    // watch(currentPage, (currentPage, prev) => {
+    //   console.log('hello');
+    //   console.log(currentPage, prev)
+    // });
+
+    watch([currentPage, numberOfTodos], (currentPage, prev) => {
+      console.log('hello');
+      console.log(currentPage, prev)
+    });
+ 
     const numberOfPages = computed(() => {
       return Math.ceil(numberOfTodos.value / limit);
     });
@@ -76,7 +101,7 @@ export default {
       error.value = '';
       try {
         const res = await axios.get(
-          `http://localhost:3000/todos?_sort=id&_order=desc&subject_like=${searchText.value}&_page=${page}&_limit=${limit}`
+          `http://localhost:3000/todos?_page=${page}&_limit=${limit}`
         );
         numberOfTodos.value = res.headers['x-total-count'];
         todos.value = res.data;
@@ -91,11 +116,11 @@ export default {
     const addTodo = async (todo) => {
       error.value = '';
       try {
-        await axios.post('http://localhost:3000/todos', {
+        const res = await axios.post('http://localhost:3000/todos', {
           subject: todo.subject,
           completed: todo.completed,
         });
-        getTodos(1);
+        todos.value.push(res.data);
       } catch (err) {
         console.log(err);
         error.value = 'Something went wrong.';
@@ -107,7 +132,7 @@ export default {
       error.value = '';
       try {
         await axios.delete('http://localhost:3000/todos/' + id);
-        getTodos(1);
+        todos.value.splice(index, 1);
       } catch (err) {
         console.log(err);
         error.value = 'Something went wrong.';
@@ -128,27 +153,16 @@ export default {
       }
     };
 
-    let timeout = null;
-    const searchTodo = () => {
-      clearTimeout(timeout);
-      getTodos(1);
-    };
-    watch(searchText, () => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        getTodos(1);
-      }, 2000);
+    const searchText = ref('');
+    const filteredTodos = computed(() => {
+      if (searchText.value) {
+        return todos.value.filter(todo => {
+          return todo.subject.includes(searchText.value);
+        });
+      }
+
+      return todos.value;
     });
-
-    // const filteredTodos = computed(() => {
-    //   if (searchText.value) {
-    //     return todos.value.filter(todo => {
-    //       return todo.subject.includes(searchText.value);
-    //     });
-    //   }
-
-    //   return todos.value;
-    // });
 
     return {
       todos,
@@ -156,12 +170,11 @@ export default {
       deleteTodo,
       toggleTodo,
       searchText,
-      // filteredTodos,
+      filteredTodos,
       error,
       numberOfPages,
       currentPage,
       getTodos,
-      searchTodo,
     };
   }
 }
