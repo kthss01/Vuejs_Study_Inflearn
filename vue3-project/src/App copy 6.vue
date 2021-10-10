@@ -37,57 +37,27 @@ export default {
     const todos = ref([]);
     const error = ref('');
  
-    const getTodos = async () => {
+    const addTodo = (todo) => {
       error.value = '';
-      try {
-        const res = await axios.get('http://localhost:3000/todos');
-        todos.value = res.data;
-      } catch (err) {
-        console.log(err);
-        error.value = 'Something went wrong.';
-      }
-    };
-
-    getTodos();
-
-    const addTodo = async (todo) => {
-      error.value = '';
-      try {
-        const res = await axios.post('http://localhost:3000/todos', {
-          subject: todo.subject,
-          completed: todo.completed,
-        });
+      // 데이터베이스에 todo를 저장
+      axios.post('http://localhost:3000/todos', {
+        subject: todo.subject,
+        completed: todo.completed,
+      }).then(res => {
+        console.log(res);
         todos.value.push(res.data);
-      } catch (err) {
+      }).catch(err => {
         console.log(err);
         error.value = 'Something went wrong.';
-      }
+      });
     };
 
-    const deleteTodo = async (index) => {
-      const id = todos.value[index].id;
-      error.value = '';
-      try {
-        await axios.delete('http://localhost:3000/todos/' + id);
-        todos.value.splice(index, 1);
-      } catch (err) {
-        console.log(err);
-        error.value = 'Something went wrong.';
-      }
+    const deleteTodo = (index) => {
+      todos.value.splice(index, 1);
     };
 
-    const toggleTodo = async (index) => {
-      error.value = '';
-      const id = todos.value[index].id;
-      try {
-        await axios.patch('http://localhost:3000/todos/' + id, {
-          completed: !todos.value[index].completed,
-        });
-        todos.value[index].completed = !todos.value[index].completed;
-      } catch (err) {
-        console.log(err);
-        error.value = 'Something went wrong.';
-      }
+    const toggleTodo = (index) => {
+      todos.value[index].completed = !todos.value[index].completed;
     };
 
     const searchText = ref('');

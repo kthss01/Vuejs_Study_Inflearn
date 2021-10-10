@@ -1,12 +1,19 @@
 {
-    "todos": [
-        {
-            "id": 1,
-            "content": "hi"
-        },
-        {
-            "id": 2,
-            "content": "hi2"
-        }
-    ]
+  "todos": [
+    {
+      "subject": "buy milk",
+      "completed": true,
+      "id": 1
+    },
+    {
+      "subject": "clean my room",
+      "completed": false,
+      "id": 2
+    },
+    {
+      "subject": "study vuejs",
+      "completed": false,
+      "id": 3
+    }
+  ]
 }
