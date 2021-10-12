@@ -37,12 +37,12 @@
     },
     {
       "subject": "12",
-      "completed": false,
+      "completed": true,
       "id": 12
     },
     {
       "subject": "123",
-      "completed": false,
+      "completed": true,
       "id": 13
     },
     {
@@ -51,19 +51,9 @@
       "id": 14
     },
     {
-      "subject": "new todo",
-      "completed": false,
-      "id": 17
-    },
-    {
       "subject": "asdf",
-      "completed": false,
+      "completed": true,
       "id": 18
-    },
-    {
-      "subject": "asd",
-      "completed": false,
-      "id": 19
     }
   ]
 }
