@@ -17,7 +17,7 @@
                         >
                         <div 
                             v-if="subjectError"
-                            style="color: red;"
+                            class="text-red"
                         >
                             {{ subjectError }}
                         </div>
@@ -197,6 +197,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+    .text-red {
+        color: red;
+    }
 </style>
