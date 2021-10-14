@@ -46,44 +46,16 @@
       "id": 13
     },
     {
-      "subject": "todo2",
-      "completed": true,
-      "id": 14
-    },
-    {
-      "subject": "asdf12222",
-      "completed": true,
-      "id": 18
-    },
-    {
       "subject": "buy milk ",
       "completed": false,
       "body": "buy milk at supermarket2",
       "id": 19
     },
     {
-      "subject": "1234",
-      "completed": false,
-      "body": "11",
-      "id": 20
-    },
-    {
       "subject": "333",
       "completed": false,
       "body": "12",
       "id": 21
-    },
-    {
-      "subject": "fff33332",
-      "completed": true,
-      "body": "223231",
-      "id": 22
-    },
-    {
-      "subject": "sds",
-      "completed": false,
-      "body": "asdf",
-      "id": 23
     }
   ]
 }
