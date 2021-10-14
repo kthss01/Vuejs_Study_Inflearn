@@ -13,6 +13,26 @@
                     v-model:subject="todo.subject"
                     :error="subjectError"
                 />
+                <!-- <Input 
+                    label="Subject"
+                    :subject="todo.subject"
+                    :error="subjectError"
+                    @update-subject="updateTodoSubject"
+                /> -->
+                <!-- <div class="form-group">
+                    <label>Subject</label>
+                    <input 
+                        v-model="todo.subject" 
+                        type="text" 
+                        class="form-control"
+                    >
+                    <div 
+                        v-if="subjectError"
+                        class="text-red"
+                    >
+                        {{ subjectError }}
+                    </div>
+                </div> -->
             </div>
             <div v-if="editing" class="col-6">
                 <div class="form-group">
@@ -65,8 +85,8 @@
 
 <script>
 import { useRoute, useRouter } from 'vue-router';
-import axios from '@/axios.js';
-import { ref, computed } from 'vue';
+import axios from 'axios';
+import { ref, computed, onUpdated } from 'vue';
 import _ from 'lodash';
 import Toast from '@/components/Toast.vue';
 import { useToast } from '@/composables/toast';
@@ -92,6 +112,10 @@ export default {
             body: '',
         });
 
+        onUpdated(() => {
+            console.log(todo.value.subject);
+        });
+
         const subjectError = ref('');
         const originalTodo = ref(null);
         const loading = ref(false);
@@ -104,10 +128,15 @@ export default {
             triggerToast,
         } = useToast();
 
+        // const updateTodoSubject = (newValue) => {
+        //     todo.value.subject = newValue;
+        //     console.log(todo.value.subject);
+        // };
+
         const getTodo = async () => {
             loading.value = true;
             try {
-                const res = await axios.get(`todos/${todoId}`);
+                const res = await axios.get(`http://localhost:3000/todos/${todoId}`);
     
                 // console.log(res);
                 todo.value = { ...res.data };
@@ -155,11 +184,15 @@ export default {
                 };
 
                 if (props.editing) {
-                    res = await axios.put(`todos/${todoId}`, data);
+                    res = await axios.put(
+                        `http://localhost:3000/todos/${todoId}`,
+                         data);
 
                     originalTodo.value = { ...res.data };
                 } else {
-                    res = await axios.post('todos/', data);
+                    res = await axios.post(
+                        `http://localhost:3000/todos/`,
+                         data);
                     todo.value.subject = '';
                     todo.value.body = '';
                 }
@@ -184,6 +217,7 @@ export default {
             toastMessage,
             toastAlertType,
             subjectError,
+            // updateTodoSubject,
         };
     }
 }
