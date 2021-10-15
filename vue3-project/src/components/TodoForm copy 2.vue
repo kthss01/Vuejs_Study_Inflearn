@@ -54,6 +54,13 @@
             Cancel
         </button>
     </form>
+    <transition name="fade">
+        <Toast 
+            v-if="showToast" 
+            :message="toastMessage"
+            :type="toastAlertType"
+        />
+    </transition>
 </template>
 
 <script>
@@ -61,11 +68,14 @@ import { useRoute, useRouter } from 'vue-router';
 import axios from '@/axios.js';
 import { ref, computed } from 'vue';
 import _ from 'lodash';
+import Toast from '@/components/Toast.vue';
 import { useToast } from '@/composables/toast';
 import Input from '@/components/Input.vue';
+import { useStore } from 'vuex';
 
 export default {
     components: {
+        Toast,
         Input,
     },
     props: {
@@ -75,6 +85,9 @@ export default {
         },
     },
     setup(props) {
+        const store = useStore();
+        console.log(store.state.showToast);
+
         const route = useRoute();
         const router = useRouter();
         const todo = ref({
@@ -88,7 +101,12 @@ export default {
         const loading = ref(false);
         const todoId = route.params.id;
 
-        const { triggerToast } = useToast();
+        const { 
+            showToast,
+            toastMessage,
+            toastAlertType,
+            triggerToast,
+        } = useToast();
 
         const getTodo = async () => {
             loading.value = true;
@@ -172,11 +190,31 @@ export default {
             moveToTodoListPage,
             onSave,
             todoUpdated,
+            showToast,
+            toastMessage,
+            toastAlertType,
             subjectError,
         };
     }
 }
 </script>
 
-<style>
+<style scoped>
+    .fade-enter-active,
+    .fade-leave-active {
+        transition: all 0.5s ease;
+    }
+
+    .fade-enter-from,
+    .fade-leave-to {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+
+    
+    .fade-enter-to,
+    .fade-leave-from {
+        opacity: 1;
+        transform: translateY(0px);
+    }
 </style>

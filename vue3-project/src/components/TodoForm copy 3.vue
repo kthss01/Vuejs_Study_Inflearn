@@ -88,7 +88,12 @@ export default {
         const loading = ref(false);
         const todoId = route.params.id;
 
-        const { triggerToast } = useToast();
+        const { 
+            showToast,
+            toastMessage,
+            toastAlertType,
+            triggerToast,
+        } = useToast();
 
         const getTodo = async () => {
             loading.value = true;
@@ -172,6 +177,9 @@ export default {
             moveToTodoListPage,
             onSave,
             todoUpdated,
+            showToast,
+            toastMessage,
+            toastAlertType,
             subjectError,
         };
     }

@@ -79,7 +79,12 @@ export default {
       return Math.ceil(numberOfTodos.value / limit);
     });
 
-    const { triggerToast } = useToast();
+    const { 
+      showToast,
+      toastMessage,
+      toastAlertType,
+      triggerToast,
+    } = useToast();
 
     const getTodos = async (page = currentPage.value) => {
       currentPage.value = page;
@@ -169,6 +174,9 @@ export default {
       currentPage,
       getTodos,
       searchTodo,
+      showToast,
+      toastMessage,
+      toastAlertType,
       moveToCreatePage,
     };
   }

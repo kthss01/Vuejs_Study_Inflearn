@@ -18,6 +18,16 @@
 import { useToast } from '@/composables/toast';
 
 export default {
+    // props: {
+    //     message: {
+    //         type: String,
+    //         required: true,
+    //     },
+    //     type: {
+    //         type: String,
+    //         default: 'success',
+    //     }
+    // }
     setup() {  
         const { toasts } = useToast();
 
