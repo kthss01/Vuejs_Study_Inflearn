@@ -12,7 +12,9 @@ export default {
         },
     },
     actions: {
-        triggerToast({ commit }, message, type = 'success') {
+        triggerToast({ commit }, payload) {
+            // message, type = 'success'
+            const { message, type } = payload;
             commit('ADD_TOAST', {
                 id: Date.now(),
                 message,
